@@ -6,10 +6,12 @@ class User:
     def __init__(self, username, fullname, callerid):
         self.username = username
         self.fullname = fullname
+        self.firstname = re.search(r'^(\w+) ', fullname).group(1)
+        self.lastname = re.search(r'^\w+ (\w+)', fullname).group(1)
         self.callerid = callerid
 
     def __str__(self):
-        return "{} - {} - {}".format(self.username, self.fullname, self.callerid)
+        return "{} - {} {} - {}".format(self.username, self.firstname, self.lastname, self.callerid)
 
 
 class Recording:

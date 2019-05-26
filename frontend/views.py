@@ -31,7 +31,6 @@ def mgmt_cdr(request):
 
     return render(request, 'mgmt/mgmt_cdr.html', context_dict)
 
-
 def mgmt_logs(request):
     context_dict = {}
 
@@ -44,8 +43,16 @@ def mgmt_logs(request):
 def mgmt_recording(request):
     context_dict = {}
 
-    if request.method == 'POST':
-        context_dict = {'device_info': "lala", 'device_info_len': 1}
+    DATE = "20190522"
+    record_list = functions.get_recordings("20190522")
+    for record in record_list:
+        print(record)
+    record_list_len = len(record_list)
+    print(record_list_len)
+    context_dict = {'record_list': record_list, 'record_list_len': record_list_len}
+
+    # if request.method == 'POST':
+    #     context_dict = {'record_list': record_list, 'record_list_len': record_list_len}
 
     return render(request, 'mgmt/mgmt_recording.html', context_dict)
 

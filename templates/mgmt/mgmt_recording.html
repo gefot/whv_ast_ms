@@ -13,9 +13,9 @@
             </div>
         </div>
     </div>
-        <div class="container-fluid pt-3" style="width: 50%">
-        {% if users %}
-            <span id="entries_count"><strong>Results: {{ num_of_users }}</strong></span>
+        <div class="container-fluid pt-3" style="width: 100%">
+        {% if record_list %}
+            <span id="entries_count"><strong>Results: {{ record_list_len }}</strong></span>
             <button class="btn btn-link" onclick="export_table('myTable')">Export Table</button>
             <div class="float-right">
                 <input type="search" align="right" id="myInput" onkeyup="search_table('myInput','myTable','entries_count')"
@@ -26,17 +26,28 @@
             <table class="table table-striped tablesorter" id="myTable">
                 <thead>
                 <tr id="myTableHead">
-                    <th>Extension <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Date <i class="fa fa-xs fa-chevron-down"></i></th>
                     <th>Full Name <i class="fa fa-xs fa-chevron-down"></i></th>
-                    <th>DID <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Source <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Destination <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Call Type <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Audio File <i class="fa fa-xs fa-chevron-down"></i></th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for entry in users %}
+                {% for entry in record_list %}
                     <tr>
-                        <td>{{ entry.username }}</td>
-                        <td>{{ entry.fullaname }}</td>
-                        <td>{{ entry.callerid }}</td>
+                        <td>{{ entry.date }}</td>
+                        <td>{{ entry.fullname }}</td>
+                        <td>{{ entry.src }}</td>
+                        <td>{{ entry.dst }}</td>
+                        <td>{{ entry.call_type }}</td>
+                        <td>
+                            {{ entry.path }}{{ entry.filename }}<br>
+                            <audio controls>
+                                <source src="../data/recordings/{{ entry.filename }}" type="audio/ogg">
+                             </audio>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

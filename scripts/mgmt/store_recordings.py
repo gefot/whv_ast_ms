@@ -28,9 +28,9 @@ for filename in file_list:
 
     for user in asterisk_users:
         if user.callerid == src_num:
-            print("Outgoing call from {}".format(user.fullaname))
+            print("Outgoing call from {}".format(user.fullname))
 
-            MY_PATH = TARGET_DIR + date + '/' + user.fullaname + '/' + 'outgoing/'
+            MY_PATH = TARGET_DIR + date + '/' + user.firstname + user.lastname + '/' + 'outgoing/'
             print(MY_PATH)
             try:
                 os.makedirs(MY_PATH)
@@ -40,8 +40,8 @@ for filename in file_list:
             shutil.move(RECORDINGS_SOURCE_FOLDER + filename, MY_PATH + filename)
 
         elif user.username == dst_num:
-            print("Incoming call from {}".format(user.fullaname))
-            MY_PATH = TARGET_DIR + date + '/' + user.fullaname + '/' + 'incoming/'
+            print("Incoming call from {}".format(user.fullname))
+            MY_PATH = TARGET_DIR + date + '/' + user.firstname + user.lastname + '/' + 'incoming/'
             try:
                 os.makedirs(MY_PATH)
             except FileExistsError:
