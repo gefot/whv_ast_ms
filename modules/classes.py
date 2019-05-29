@@ -18,6 +18,7 @@ class Recording:
     def __init__(self, filename, path):
         self.filename = filename
         self.path = path
+        self.relative_path = re.search(r'/home/whv/whv_ast_ms/static/(.*)', self.path).group(1)
 
         self.date = "unknown"
         self.fullname = "unknown"
