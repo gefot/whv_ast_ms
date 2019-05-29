@@ -45,10 +45,10 @@ def mgmt_recording(request):
 
     DATE = "20190522"
     record_list = functions.get_recordings("20190522")
-    for record in record_list:
-        print(record)
+    # for record in record_list:
+    #     print(record)
     record_list_len = len(record_list)
-    print(record_list_len)
+    # print(record_list_len)
     context_dict = {'record_list': record_list, 'record_list_len': record_list_len}
 
     # if request.method == 'POST':

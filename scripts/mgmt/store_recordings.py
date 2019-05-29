@@ -1,13 +1,15 @@
 import re
 import os
 import shutil
+import time
 
 from modules import functions
 
 # Main
 RECORDINGS_SOURCE_FOLDER = "/var/spool/asterisk/monitor/"
-TARGET_DIR = os.path.abspath(__file__ + "/../../../") + "/data/recordings/"
+TARGET_DIR = os.path.abspath(__file__ + "/../../../") + "/static/recordings/"
 print(TARGET_DIR)
+
 
 asterisk_users = functions.get_users()
 for user in asterisk_users:
@@ -48,5 +50,7 @@ for filename in file_list:
                 pass
 
             shutil.move(RECORDINGS_SOURCE_FOLDER + filename, MY_PATH + filename)
+            time.sleep(2)
+
 
     print("\n\n")

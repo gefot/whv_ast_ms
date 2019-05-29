@@ -27,7 +27,7 @@ def get_users():
 
 
 def get_recordings(DATE):
-    RECORDINGS_SOURCE_FOLDER = os.path.abspath(__file__ + "/../../") + "/data/recordings/"
+    RECORDINGS_SOURCE_FOLDER = os.path.abspath(__file__ + "/../../") + "/static/recordings/"
     TARGET_FOLDER = RECORDINGS_SOURCE_FOLDER + DATE + "/"
 
     file_list = []
