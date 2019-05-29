@@ -6,9 +6,22 @@
 {% block block_body %}
     <div class="container-fluid pt-3" style="width: 20%">
         <div>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-info" type="submit">Get Registration Info</button>
+                <hr>
+            </form>
+
             <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                {{ form.date }}
                 <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+            <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
+                <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
@@ -59,10 +72,11 @@
 {% endblock block_body %}
 
 {% block scripts %}
-    <script type="text/javascript">
+    <script>
         $(function () {
-            $('#datetimepicker1').datetimepicker({
-                format: 'L'
+            $("#datetimepicker1").datetimepicker({
+                format: 'DD/MM/YYYY HH:mm',
+                //format: 'L'
             });
         });
     </script>

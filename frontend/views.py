@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 from modules import functions
+from frontend.forms import DateForm
 
 
 # Create your views here.
@@ -31,6 +31,7 @@ def mgmt_cdr(request):
 
     return render(request, 'mgmt/mgmt_cdr.html', context_dict)
 
+
 def mgmt_logs(request):
     context_dict = {}
 
@@ -42,6 +43,12 @@ def mgmt_logs(request):
 
 def mgmt_recording(request):
     context_dict = {}
+
+    if request.method == 'POST':
+        form = DateForm(request.POST)
+        if form.is_valid():
+            date = form.cleaned_data['date']
+            test = form.cleaned_data['test']
 
     DATE = "20190522"
     record_list = functions.get_recordings("20190522")
@@ -65,5 +72,6 @@ def vm_info(request):
         context_dict = {'device_info': "lala", 'device_info_len': 1}
 
     return render(request, 'vm/vm_info.html', context_dict)
+
 
 ########################################################################################################################
