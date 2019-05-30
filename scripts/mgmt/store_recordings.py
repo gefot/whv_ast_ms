@@ -1,3 +1,7 @@
+"""
+Gets recordings from /var/spool/asterisk/monitor/ and stores them in Django project (/static/recordings/)
+using the appropriate structure (date//usen/in-outgoing)
+"""
 import re
 import os
 import shutil
@@ -8,9 +12,7 @@ from modules import functions
 # Main
 RECORDINGS_SOURCE_FOLDER = "/var/spool/asterisk/monitor/"
 TARGET_DIR = os.path.abspath(__file__ + "/../../../") + "/static/recordings/"
-
 print(TARGET_DIR)
-
 
 asterisk_users = functions.get_users()
 for user in asterisk_users:
