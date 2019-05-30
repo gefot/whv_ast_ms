@@ -1,7 +1,12 @@
 """
 Gets recordings from /var/spool/asterisk/monitor/ and stores them in Django project (/static/recordings/)
-using the appropriate structure (date//usen/in-outgoing)
+using the appropriate structure (date/user/in-outgoing)
 """
+# This is needed so as to be run on CLI
+import sys
+
+sys.path.append('/home/whv/whv_ast_ms/')
+
 import re
 import os
 import shutil
@@ -54,6 +59,5 @@ for filename in file_list:
 
             shutil.move(RECORDINGS_SOURCE_FOLDER + filename, MY_PATH + filename)
             time.sleep(2)
-
 
     print("\n\n")
