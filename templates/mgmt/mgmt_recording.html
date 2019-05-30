@@ -9,22 +9,9 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button class="btn btn-info" type="submit">Get Registration Info</button>
+                <button class="btn btn-info" type="submit">Search Date</button>
                 <hr>
             </form>
-
-            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                {{ form.date }}
-                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                </div>
-            </div>
-            <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
-                <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="container-fluid pt-3" style="width: 80%">
@@ -41,6 +28,7 @@
                 <thead>
                 <tr id="myTableHead">
                     <th>Date <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Time <i class="fa fa-xs fa-chevron-down"></i></th>
                     <th>Full Name <i class="fa fa-xs fa-chevron-down"></i></th>
                     <th>Source <i class="fa fa-xs fa-chevron-down"></i></th>
                     <th>Destination <i class="fa fa-xs fa-chevron-down"></i></th>
@@ -52,6 +40,7 @@
                 {% for entry in record_list %}
                     <tr>
                         <td>{{ entry.date }}</td>
+                        <td>{{ entry.time }}</td>
                         <td>{{ entry.fullname }}</td>
                         <td>{{ entry.src }}</td>
                         <td>{{ entry.dst }}</td>
@@ -72,12 +61,12 @@
 {% endblock block_body %}
 
 {% block scripts %}
-    <script>
-        $(function () {
-            $("#datetimepicker1").datetimepicker({
-                format: 'DD/MM/YYYY HH:mm',
-                //format: 'L'
-            });
-        });
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.1/js/jquery.tablesorter.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+            $("#myTable").tablesorter();
+        }
+    );
     </script>
+
 {% endblock scripts %}

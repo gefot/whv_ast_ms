@@ -21,6 +21,7 @@ class Recording:
         self.relative_path = re.search(r'/home/whv/whv_ast_ms/static/(.*)', self.path).group(1)
 
         self.date = "unknown"
+        self.time = "unknown"
         self.fullname = "unknown"
         self.src = "unknown"
         self.dst = "unknown"
@@ -34,6 +35,11 @@ class Recording:
         except:
             self.date = "unknown"
 
+        try:
+            time = re.search(r'^\d+-(\d+)-', filename).group(1)
+            self.time = time
+        except:
+            self.time = "unknown"
         try:
             src = re.search(r'.*FROM\-(.*)-TO', filename).group(1)
             self.src = src

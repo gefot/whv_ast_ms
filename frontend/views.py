@@ -42,24 +42,26 @@ def mgmt_logs(request):
 
 
 def mgmt_recording(request):
-    context_dict = {}
+    form = DateForm()
+    date = ""
 
     if request.method == 'POST':
         form = DateForm(request.POST)
         if form.is_valid():
             date = form.cleaned_data['date']
-            test = form.cleaned_data['test']
+            print(date)
 
-    DATE = "20190522"
-    record_list = functions.get_recordings("20190522")
+    # date = "20190522"
+    record_list = []
+    record_list_len = 0
+    if date is not "":
+        record_list = functions.get_recordings(date)
+        record_list_len = len(record_list)
+
     # for record in record_list:
     #     print(record)
-    record_list_len = len(record_list)
     # print(record_list_len)
-    context_dict = {'record_list': record_list, 'record_list_len': record_list_len}
-
-    # if request.method == 'POST':
-    #     context_dict = {'record_list': record_list, 'record_list_len': record_list_len}
+    context_dict = {'form': form, 'record_list': record_list, 'record_list_len': record_list_len}
 
     return render(request, 'mgmt/mgmt_recording.html', context_dict)
 
@@ -72,6 +74,5 @@ def vm_info(request):
         context_dict = {'device_info': "lala", 'device_info_len': 1}
 
     return render(request, 'vm/vm_info.html', context_dict)
-
 
 ########################################################################################################################
