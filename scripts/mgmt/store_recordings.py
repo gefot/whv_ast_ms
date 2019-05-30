@@ -8,6 +8,7 @@ from modules import functions
 # Main
 RECORDINGS_SOURCE_FOLDER = "/var/spool/asterisk/monitor/"
 TARGET_DIR = os.path.abspath(__file__ + "/../../../") + "/static/recordings/"
+
 print(TARGET_DIR)
 
 
