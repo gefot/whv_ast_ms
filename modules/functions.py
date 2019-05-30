@@ -6,10 +6,10 @@ from modules import classes
 
 ####################################################################################
 def get_users():
-    '''
+    """
     Traverses /etc/asterisk/sip.conf
-    :return:
-    '''
+    :return: list of User classes
+    """
     SIP_USERS_CONF = '/etc/asterisk/sip.conf'
 
     users = []
@@ -35,6 +35,11 @@ def get_users():
 
 ####################################################################################
 def get_recordings(DATE):
+    """
+
+    :param DATE: date to search for recording; in format 20190530
+    :return: list of Recording classes
+    """
 
     RECORDINGS_SOURCE_FOLDER = os.path.abspath(__file__ + "/../../") + "/static/recordings/"
     TARGET_FOLDER = RECORDINGS_SOURCE_FOLDER + DATE + "/"

@@ -4,19 +4,19 @@ from modules import functions
 from frontend.forms import DateForm
 
 
-# Create your views here.
+########################################################################################################################
 def index(request):
     return render(request, 'base.html')
 
 
 ########################################################################################################################
 def config_users(request):
-    context_dict = {}
 
     users = functions.get_users()
     num_of_users = len(users)
     for user in users:
         print(user)
+
     context_dict = {'users': users, 'num_of_users': num_of_users}
 
     return render(request, 'config/config_users.html', context_dict)
@@ -61,6 +61,7 @@ def mgmt_recording(request):
     # for record in record_list:
     #     print(record)
     # print(record_list_len)
+
     context_dict = {'form': form, 'record_list': record_list, 'record_list_len': record_list_len}
 
     return render(request, 'mgmt/mgmt_recording.html', context_dict)
