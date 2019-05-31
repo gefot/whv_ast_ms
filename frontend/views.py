@@ -42,25 +42,20 @@ def mgmt_logs(request):
 
 
 def mgmt_recording(request):
+
     form = DateForm()
     date = ""
+    record_list = []
+    record_list_len = 0
 
     if request.method == 'POST':
         form = DateForm(request.POST)
         if form.is_valid():
             date = form.cleaned_data['date']
-            print(date)
 
-    # date = "20190522"
-    record_list = []
-    record_list_len = 0
     if date is not "":
         record_list = functions.get_recordings(date)
         record_list_len = len(record_list)
-
-    # for record in record_list:
-    #     print(record)
-    # print(record_list_len)
 
     context_dict = {'form': form, 'record_list': record_list, 'record_list_len': record_list_len}
 
