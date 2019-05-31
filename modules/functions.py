@@ -1,5 +1,6 @@
 import re
 import os
+import subprocess
 
 from modules import classes
 
@@ -34,15 +35,15 @@ def get_users():
 
 
 ####################################################################################
-def get_recordings(DATE):
+def get_recordings(date):
     """
 
-    :param DATE: date to search for recording; in format 20190530
+    :param date: date to search for recording; in format 20190530
     :return: list of Recording classes
     """
 
     RECORDINGS_SOURCE_FOLDER = os.path.abspath(__file__ + "/../../") + "/static/recordings/"
-    TARGET_FOLDER = RECORDINGS_SOURCE_FOLDER + DATE + "/"
+    TARGET_FOLDER = RECORDINGS_SOURCE_FOLDER + date + "/"
 
     file_list = []
     record_list = []
@@ -72,6 +73,13 @@ def get_recordings(DATE):
         pass
 
     return record_list
+
+
+####################################################################################
+def get_wav_duration(wav_file):
+
+    duration = subprocess.call(['soxi', '-D', wav_file])
+    return duration
 
 
 ####################################################################################
