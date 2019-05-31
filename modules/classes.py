@@ -1,4 +1,3 @@
-
 import re
 from modules import functions
 
@@ -34,20 +33,25 @@ class Recording:
         self.src = "unknown"
         self.dst = "unknown"
         self.call_type = "unknown"
+        self.wav_duration = "unknown"
 
         asterisk_users = functions.get_users()
 
         try:
             date = re.search(r'^(\d+)-', filename).group(1)
             self.date = date
+            self.date_gui = date[0:4] + "-" + date[4:6] + "-" + date[6:8]
         except:
             self.date = "unknown"
+            self.date_gui = "unknown"
 
         try:
             time = re.search(r'^\d+-(\d+)-', filename).group(1)
             self.time = time
+            self.time_gui = time[0:2] + ":" + time[2:4] + ":" + time[4:6]
         except:
             self.time = "unknown"
+            self.time_gui = "unknown"
         try:
             src = re.search(r'.*FROM\-(.*)-TO', filename).group(1)
             self.src = src
@@ -64,13 +68,18 @@ class Recording:
             if user.callerid == self.src:
                 self.call_type = "outgoing"
                 self.fullname = user.fullname
-                break
+                # Replace source (10-digit number) with user fullname
+                self.src = user.fullname
             elif user.username == self.dst:
                 self.call_type = "incoming"
                 self.fullname = user.fullname
+                # Replace destination (4-digit  number) with user fullname
+                self.dst = user.fullname
+
+        wav_duration = functions.get_wav_duration(self.fullpath + filename)
+        self.wav_duration = wav_duration
 
     def __str__(self):
         return "{} - {} - {} - {} - {} - {}".format(self.filename, self.fullpath, self.fullname, self.src, self.dst, self.call_type)
-
 
 ####################################################################################

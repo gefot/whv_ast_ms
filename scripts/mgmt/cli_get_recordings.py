@@ -11,4 +11,5 @@ for record in record_list:
     print("\n")
     print(record.fullpath+record.filename)
     print(functions.get_wav_duration(record.fullpath+record.filename))
+    print(record.wav_duration)
 
