@@ -71,7 +71,8 @@ def get_wav_duration(wav_file):
     f = sf.SoundFile(wav_file)
     samples = len(f)
     sampling_rate = f.samplerate
-    duration = samples / sampling_rate
+    duration = (int)(samples / sampling_rate)
+
     # print('samples = {}'.format(samples))
     # print('sample rate = {}'.format(sampling_rate))
     # print('seconds = {}'.format(duration))
