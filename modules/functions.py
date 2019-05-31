@@ -1,6 +1,6 @@
 import re
 import os
-import subprocess
+import soundfile as sf
 
 from modules import classes
 
@@ -42,33 +42,23 @@ def get_recordings(date):
     :return: list of Recording classes
     """
 
-    RECORDINGS_SOURCE_FOLDER = os.path.abspath(__file__ + "/../../") + "/static/recordings/"
-    TARGET_FOLDER = RECORDINGS_SOURCE_FOLDER + date + "/"
+    RECORDINGS_SOURCE_FOLDER = "/home/whv/whv_ast_ms/static/recordings/"
 
-    file_list = []
+    # Use short_date to search for recordings only to the corresponding month
+    short_date = re.search(r'^(\d{6})', date).group(1)
+    recordings_folder = RECORDINGS_SOURCE_FOLDER + short_date + "/"
+
+    # Get user list from configuration
+    asterisk_users = get_users()
+    for user in asterisk_users:
+        print(user)
+
     record_list = []
     try:
-        for x in os.listdir(TARGET_FOLDER):
-            file_list.append(x)
-
-        record_list = []
-        for fullname in file_list:
-            TARGET_FOLDER_2 = TARGET_FOLDER + fullname + "/"
-            # print(TARGET_FOLDER_2)
-
-            file_list_2 = []
-            for x in os.listdir(TARGET_FOLDER_2):
-                file_list_2.append(x)
-
-                TARGET_FOLDER_3 = TARGET_FOLDER_2 + x + "/"
-                # print(TARGET_FOLDER_3)
-
-                file_list_3 = []
-                for x in os.listdir(TARGET_FOLDER_3):
-                    file_list_3.append(x)
-
-                    record = classes.Recording(x, TARGET_FOLDER_3)
-                    record_list.append(record)
+        for filename in os.listdir(recordings_folder):
+            if filename.startswith(date):
+                record = classes.Recording(filename, recordings_folder)
+                record_list.append(record)
     except:
         pass
 
@@ -78,8 +68,14 @@ def get_recordings(date):
 ####################################################################################
 def get_wav_duration(wav_file):
 
-    duration = subprocess.call(['soxi', '-D', wav_file])
-    return duration
+    f = sf.SoundFile(wav_file)
+    samples = len(f)
+    sampling_rate = f.samplerate
+    duration = samples / sampling_rate
+    # print('samples = {}'.format(samples))
+    # print('sample rate = {}'.format(sampling_rate))
+    # print('seconds = {}'.format(duration))
 
+    return duration
 
 ####################################################################################

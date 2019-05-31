@@ -23,11 +23,11 @@ class User:
 
 ####################################################################################
 class Recording:
-    def __init__(self, filename, path):
+    def __init__(self, filename, fullpath):
         self.filename = filename
-        self.path = path
+        self.fullpath = fullpath
 
-        self.relative_path = re.search(r'/home/whv/whv_ast_ms/static/(.*)', self.path).group(1)
+        self.relative_path = re.search(r'/home/whv/whv_ast_ms/static/(.*)', self.fullpath).group(1)
         self.date = "unknown"
         self.time = "unknown"
         self.fullname = "unknown"
@@ -64,12 +64,13 @@ class Recording:
             if user.callerid == self.src:
                 self.call_type = "outgoing"
                 self.fullname = user.fullname
+                break
             elif user.username == self.dst:
                 self.call_type = "incoming"
                 self.fullname = user.fullname
 
     def __str__(self):
-        return "{} - {} - {} - {} - {} - {}".format(self.filename, self.path, self.fullname, self.src, self.dst, self.call_type)
+        return "{} - {} - {} - {} - {} - {}".format(self.filename, self.fullpath, self.fullname, self.src, self.dst, self.call_type)
 
 
 ####################################################################################
