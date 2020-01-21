@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block block_body %}
+    <div class="container-fluid pt-3" style="width: 90%">
+        <p>
+            {% if date %}
+
+            {% else %}
+                Please enter date:
+            {% endif %}
+
+        </p>
+        <div>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.date.label }}{{ form.date() }}
+                {{ form.submit() }}
+            </form>
+        </div>
+
+        <hr>
+        {% if record_list %}
+            <span id="entries_count"><strong>Results: {{ record_list_len }}</strong></span>
+            <button class="btn btn-link" onclick="export_table('myTable')">Export Table</button>
+            <div class="float-right">
+                <input type="search" align="right" id="myInput" onkeyup="search_table('myInput','myTable','entries_count')"
+                       placeholder="Search here...">
+                <p></p>
+            </div>
+
+            <table class="table table-striped tablesorter" id="myTable">
+                <thead>
+                <tr id="myTableHead">
+                    <th>Date <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Time <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>From <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>To <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Call Type <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Duration (sec) <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Audio File <i class="fa fa-xs fa-chevron-down"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in record_list %}
+                    <tr>
+                        <td>{{ entry.date_gui }}</td>
+                        <td>{{ entry.time_gui }}</td>
+                        <td>{{ entry.src }}</td>
+                        <td>{{ entry.dst }}</td>
+                        <td>{{ entry.call_type }}</td>
+                        <td>{{ entry.wav_duration }}</td>
+                        <td>
+                            <audio controls preload="none">
+                            </audio>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            No results found for {{ date }}
+
+        {% endif %}
+
+
+    </div>
+
+{% endblock block_body %}
+
+
+{% block scripts %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.1/js/jquery.tablesorter.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+                $("#myTable").tablesorter();
+                console.log("Loading!!!")
+            }
+        );
+    </script>
+{% endblock scripts %}
