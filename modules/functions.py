@@ -6,7 +6,7 @@ from modules import classes
 
 
 ####################################################################################
-def get_users():
+def get_configured_users():
     """
     Traverses /etc/asterisk/sip.conf
     :return: list of User classes
@@ -28,8 +28,8 @@ def get_users():
                 # print(fullname)
                 # print(callerid)
                 users.append(my_user)
-            except:
-                pass
+            except Exception as Ex:
+                print(Ex)
 
     return users
 
@@ -44,30 +44,30 @@ def get_recordings(date):
 
     RECORDINGS_SOURCE_FOLDER = "/home/whv/whv_ast_ms/static/recordings/"
 
-    # Use short_date to search for recordings only to the corresponding month
-    short_date = re.search(r'^(\d{6})', date).group(1)
-    recordings_folder = RECORDINGS_SOURCE_FOLDER + short_date + "/"
-
-    # Get user list from configuration
-    asterisk_users = get_users()
-    for user in asterisk_users:
-        print(user)
-
     record_list = []
+
     try:
+        # Use short_date to search for recordings only to the corresponding month
+        short_date = re.search(r'^(\d{6})', date).group(1)
+        recordings_folder = RECORDINGS_SOURCE_FOLDER + short_date + "/"
+
         for filename in os.listdir(recordings_folder):
-            if filename.startswith(date):
-                record = classes.Recording(filename, recordings_folder)
-                record_list.append(record)
-    except:
-        pass
+            try:
+                if filename.startswith(date):
+                    record = classes.Recording(filename, recordings_folder)
+                    record_list.append(record)
+            except Exception as Ex:
+                print(Ex)
+                pass
+
+    except Exception as Ex:
+        print(Ex)
 
     return record_list
 
 
 ####################################################################################
 def get_wav_duration(wav_file):
-
     f = sf.SoundFile(wav_file)
     samples = len(f)
     sampling_rate = f.samplerate

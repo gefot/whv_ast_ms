@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% load static %}
 
 <html lang="en">
 <!--head-->
@@ -33,15 +32,15 @@
             integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
             crossorigin="anonymous"></script>
 
-    <!--static css-->
-    <link rel="stylesheet" type="text/css" href="{% static 'my_style.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='my_style.css')}}">
+
 </head>
 <!--end of head-->
 
 
 <!--body-->
 <body>
-
 
 <!--navbar-->
 <nav class="navbar navbar-expand-md navbar-light">
@@ -57,18 +56,21 @@
                     <ul class="navbar-nav flex-column">
 
                         <li class="nav-item mb-2">
-                            <a href="{% url 'frontend:index' %}" class="nav-link text-white sidebar-link-current"><i class="fas fa-clipboard-list text-light mr-3"></i>Dashboard</a>
+                            <a href="{{ url_for('main') }}" class="nav-link text-white sidebar-link-current"><i class="fas fa-clipboard-list text-light mr-3"></i>Dashboard</a>
                         </li>
 
                         <li class="nav-item mb-2">
                             <a href="#" class="nav-link text-white sidebar-link" data-toggle="collapse" data-target="#submenu-config" aria-expanded="false"
                                aria-controls="submenu-net">
-                                <i class="fas fa-cog text-light mr-2"></i>Configuration<i class="fa fa-caret-down"></i>
+                                <i class="fas fa-cog text-light mr-2"></i>Management<i class="fa fa-caret-down"></i>
                             </a>
                             <div id="submenu-config" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                     <li class="nav-item ml-4">
-                                        <a class="nav-link text-white sidebar-link" href="{% url 'frontend:config_users' %}">Users</a>
+                                        <a class="nav-link text-white sidebar-link" href="{{ url_for('show_configured_users') }}">Configured Users</a>
+                                    </li>
+                                    <li class="nav-item ml-4">
+                                        <a class="nav-link text-white sidebar-link" href="{{ url_for('show_recordings') }}">Recordings</a>
                                     </li>
                                 </ul>
                             </div>
@@ -77,37 +79,17 @@
                         <li class="nav-item mb-2">
                             <a href="#" class="nav-link text-white sidebar-link" data-toggle="collapse" data-target="#submenu-mgmt" aria-expanded="false"
                                aria-controls="submenu-voip">
-                                <i class="fas fa-phone text-light mr-2"></i>Management<i class="fa fa-caret-down"></i>
+                                <i class="fas fa-phone text-light mr-2"></i>Monitor<i class="fa fa-caret-down"></i>
                             </a>
                             <div id="submenu-mgmt" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                     <li class="nav-item ml-4">
-                                        <a class="nav-link text-white sidebar-link" href="{% url 'frontend:mgmt_cdr' %}">CDR Info</a>
-                                    </li>
-                                    <li class="nav-item ml-4">
-                                        <a class="nav-link text-white sidebar-link" href="{% url 'frontend:mgmt_logs' %}">Logs Info</a>
-                                    </li>
-                                    <li class="nav-item ml-4">
-                                        <a class="nav-link text-white sidebar-link" href="{% url 'frontend:mgmt_recording' %}">Recordings Info</a>
+                                        <a class="nav-link text-white sidebar-link" href="#">Active Users</a>
                                     </li>
                                 </ul>
 
                             </div>
                         </li>
-
-                        <li class="nav-item mb-2">
-                            <a href="#" class="nav-link text-white sidebar-link" data-toggle="collapse" data-target="#submenu-vm" aria-expanded="false" aria-controls="submenu-net">
-                                <i class="fas fa-microphone text-light mr-2"></i>Voicemail<i class="fa fa-caret-down"></i>
-                            </a>
-                            <div id="submenu-vm" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item ml-4">
-                                        <a class="nav-link text-white sidebar-link" href="{% url 'frontend:vm_info' %}">VM Info</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
                     </ul>
                 </div>
                 <!--End of Sidebar-->
@@ -130,7 +112,7 @@
                         </div>
                         <div class="col-md-3">
                             <ul class="navbar-nav">
-                                <li class="nav-item mx-2 ml-md-auto"><a href="{% url 'admin:index' %}" class="nav-link" data-toggle="modal" data-target="#todo-message"><i
+                                <li class="nav-item mx-2 ml-md-auto"><a href="#" class="nav-link" data-toggle="modal" data-target="#todo-message"><i
                                         class="fas fa-user text-bark"></i></a></li>
                                 <li class="nav-item mx-2"><a href="#" class="nav-link" data-toggle="modal" data-target="#todo-message"><i
                                         class="fas fa-sign-in-alt text-danger"></i></a></li>
@@ -159,22 +141,14 @@
 </div>
 <!--end of modal-->
 
-
-<!--main content start-->
+<!--body content start-->
 {% block block_body %}
-    <div class="container">
-        <div class="row justify-content-center pt-3">
-            <center><h2>Welcome to <br><br> <strong>Hermes</strong><br><br> IP PBX Management System!</h2></center>
-        </div>
-    </div>
 {% endblock block_body %}
-<!--end of main content-->
-
+<!--end of body content-->
 
 <!--static javascript-->
-<script src="{% static 'my_javascript.js' %}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='my_javascript.js')}}"></script>
 <!--end of static javascript-->
-
 
 <!--scripts-->
 {% block scripts %}

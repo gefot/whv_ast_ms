@@ -35,7 +35,7 @@ class Recording:
         self.call_type = "unknown"
         self.wav_duration = "unknown"
 
-        asterisk_users = functions.get_users()
+        asterisk_users = functions.get_configured_users()
 
         try:
             date = re.search(r'^(\d+)-', filename).group(1)
