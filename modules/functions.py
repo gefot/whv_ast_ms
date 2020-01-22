@@ -1,3 +1,6 @@
+import sys
+
+
 import re
 import os
 import soundfile as sf
@@ -43,6 +46,7 @@ def get_recordings(date):
     """
 
     RECORDINGS_SOURCE_FOLDER = "/home/whv/whv_ast_ms/static/recordings/"
+    # RECORDINGS_SOURCE_FOLDER = "/home/whv/whv_ast_ms/static/recordings/"
 
     record_list = []
 

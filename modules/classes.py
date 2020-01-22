@@ -80,6 +80,6 @@ class Recording:
         self.wav_duration = wav_duration
 
     def __str__(self):
-        return "{} - {} - {} - {} - {} - {}".format(self.filename, self.fullpath, self.fullname, self.src, self.dst, self.call_type)
+        return "{} - {} - {} - {} - {} - {} - {}".format(self.filename, self.fullpath, self.fullname, self.src, self.dst, self.call_type, self.relative_path)
 
 ####################################################################################

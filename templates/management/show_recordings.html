@@ -52,6 +52,7 @@
                         <td>{{ entry.wav_duration }}</td>
                         <td>
                             <audio controls preload="none">
+                                <source src="{{ url_for('static',filename=entry.relative_path+'/'+entry.filename) }}" type="audio/ogg">
                             </audio>
 
                         </td>
@@ -74,8 +75,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.1/js/jquery.tablesorter.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-                $("#myTable").tablesorter();
-                console.log("Loading!!!")
+                $("#myTable").tablesorter({
+                    // sort on the first and second column, order asc
+                    sortList: [[0,0],[1,0]]
+                });
+                console.log("tablesorter: Loading!!!")
             }
         );
     </script>
