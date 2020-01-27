@@ -1,0 +1,5 @@
+pip3 list -l (show packages installed locally)
+
+apt-get install python3-flask
+pip3 install WTForms
+

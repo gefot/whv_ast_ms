@@ -35,14 +35,13 @@ class RecordingsForm(flask_wtf.FlaskForm):
 def index():
     form = SignupForm()
     if form.validate_on_submit():
-        flash("Wrong username or password")
         session['login_username'] = form.login_username.data
         session['login_password'] = form.login_password.data
 
-        if session['login_username'] == "whitehat" and session['login_password'] == "wh!teh@t":
-            return redirect(url_for('main'))
+        if session['login_username'] != "whitehat" or session['login_password'] != "wh!teh@t":
+            flash('Wrong username or password')
         else:
-            pass
+            return redirect(url_for('main'))
 
     return render_template('signup.html', form=form)
 
