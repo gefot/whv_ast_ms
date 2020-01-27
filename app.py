@@ -22,12 +22,12 @@ class RecordingsForm(flask_wtf.FlaskForm):
     # print("In class:", date)
 
     date = wtforms.StringField('Date of recording: ')
-    agent = wtforms.SelectField('Select Whitehat employee',
-                                choices=[
-                                    ('1011', 'William Griffith'),
-                                    ('1012', 'Kim De Los Reyes'),
-                                    ('1014', 'Daniel Drenski'),
-                                ])
+    # agent = wtforms.SelectField('Select Whitehat employee',
+    #                             choices=[
+    #                                 ('1011', 'William Griffith'),
+    #                                 ('1012', 'Kim De Los Reyes'),
+    #                                 ('1014', 'Daniel Drenski'),
+    #                             ])
     submit = wtforms.SubmitField('Submit')
 
 
@@ -78,8 +78,8 @@ def show_recordings():
     record_list_len = 0
 
     if form.validate_on_submit():
-        session['data'] = form.date.data
-        session['agent'] = form.agent.data
+        # session['data'] = form.date.data
+        # session['agent'] = form.agent.data
         date = form.date.data
         print(type(date), date)
 
