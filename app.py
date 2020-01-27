@@ -1,11 +1,18 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session, redirect, url_for, flash
 import flask_wtf
 import wtforms
+from wtforms.validators import DataRequired
 
 from modules import functions
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecretkey'
+
+
+class SignupForm(flask_wtf.FlaskForm):
+    login_username = wtforms.StringField('Enter Username')
+    login_password = wtforms.PasswordField('Enter Password')
+    submit = wtforms.SubmitField('Login')
 
 
 class RecordingsForm(flask_wtf.FlaskForm):
@@ -15,12 +22,29 @@ class RecordingsForm(flask_wtf.FlaskForm):
     # print("In class:", date)
 
     date = wtforms.StringField('Date of recording: ')
+    agent = wtforms.SelectField('Select Whitehat employee',
+                                choices=[
+                                    ('1011', 'William Griffith'),
+                                    ('1012', 'Kim De Los Reyes'),
+                                    ('1014', 'Daniel Drenski'),
+                                ])
     submit = wtforms.SubmitField('Submit')
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('main.html')
+    form = SignupForm()
+    if form.validate_on_submit():
+        flash("Wrong username or password")
+        session['login_username'] = form.login_username.data
+        session['login_password'] = form.login_password.data
+
+        if session['login_username'] == "whitehat" and session['login_password'] == "wh!teh@t":
+            return redirect(url_for('main'))
+        else:
+            pass
+
+    return render_template('signup.html', form=form)
 
 
 @app.route('/main')
@@ -55,6 +79,8 @@ def show_recordings():
     record_list_len = 0
 
     if form.validate_on_submit():
+        session['data'] = form.date.data
+        session['agent'] = form.agent.data
         date = form.date.data
         print(type(date), date)
 
