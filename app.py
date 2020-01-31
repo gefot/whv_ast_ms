@@ -1,30 +1,58 @@
-from flask import Flask, render_template, session, redirect, url_for, flash
-from forms import SignupForm, RecordingsForm
+# app.py
 
+### Working code
+# import os
+# from flask import Flask, render_template, session, redirect, url_for, flash
+#
+# from whv_ast_ms.forms import SignupForm, RecordingsForm
+# from modules import functions
+#
+# app = Flask(__name__)
+# app.config['SECRET_KEY'] = 'mysecretkey'
+
+from whv_ast_ms.forms import SignupForm, RecordingsForm
 from modules import functions
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'mysecretkey'
+from whv_ast_ms import app, db
+from flask import render_template, redirect, request, url_for, flash, abort
+from flask_login import login_user, login_required, logout_user
+from whv_ast_ms.models import User
+from whv_ast_ms.forms import RegistrationForm, LoginForm
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    form = SignupForm()
-    if form.validate_on_submit():
-        session['login_username'] = form.login_username.data
-        session['login_password'] = form.login_password.data
-
-        if session['login_username'] != "whitehat" or session['login_password'] != "wh!teh@t":
-            flash('Wrong username or password')
-        else:
-            return redirect(url_for('main'))
-
-    return render_template('signup.html', form=form)
+@app.route('/')
+def home():
+    return render_template('home.html')
 
 
-@app.route('/main')
-def main():
-    return render_template('main.html')
+@app.route('/welcome')
+@login_required
+def welcome():
+    return render_template('welcome_user.html')
+
+
+
+
+### Working Code
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     form = SignupForm()
+#     if form.validate_on_submit():
+#         session['login_username'] = form.login_username.data
+#         session['login_password'] = form.login_password.data
+#
+#         if session['login_username'] != "whitehat" or session['login_password'] != "wh!teh@t":
+#             flash('Wrong username or password')
+#         else:
+#             return redirect(url_for('main'))
+#
+#     return render_template('signup.html', form=form)
+#
+#
+# @app.route('/main')
+# def main():
+#     return render_template('main.html')
 
 
 @app.route('/test')
