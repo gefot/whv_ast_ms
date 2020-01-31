@@ -1,11 +1,14 @@
 import sys
-
+sys.path.append('/home/whv/whv_ast_ms/')
 
 import re
 import os
 import soundfile as sf
 
 from modules import classes
+
+SIP_USERS_CONF = '/etc/asterisk/sip.conf'
+RECORDINGS_SOURCE_FOLDER = "/media/asterisk_recordings/"
 
 
 ####################################################################################
@@ -14,8 +17,6 @@ def get_configured_users():
     Traverses /etc/asterisk/sip.conf
     :return: list of User classes
     """
-    SIP_USERS_CONF = '/etc/asterisk/sip.conf'
-
     users = []
     fd = open(SIP_USERS_CONF, 'r')
     for line in fd:
@@ -45,9 +46,6 @@ def get_recordings(date):
     :return: list of Recording classes
     """
 
-    RECORDINGS_SOURCE_FOLDER = "/home/whv/whv_ast_ms/static/recordings/"
-    # RECORDINGS_SOURCE_FOLDER = "/home/whv/whv_ast_ms/static/recordings/"
-
     record_list = []
 
     try:
@@ -61,7 +59,7 @@ def get_recordings(date):
                     record = classes.Recording(filename, recordings_folder)
                     record_list.append(record)
             except Exception as Ex:
-                print(Ex)
+                print("In get_recordings: Exception:{} - {}".format(Ex, filename))
                 pass
 
     except Exception as Ex:

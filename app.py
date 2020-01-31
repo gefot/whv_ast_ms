@@ -1,20 +1,10 @@
 # app.py
 
-### Working code
-# import os
-# from flask import Flask, render_template, session, redirect, url_for, flash
-#
-# from whv_ast_ms.forms import SignupForm, RecordingsForm
-# from modules import functions
-#
-# app = Flask(__name__)
-# app.config['SECRET_KEY'] = 'mysecretkey'
-
 from whv_ast_ms.forms import SignupForm, RecordingsForm
 from modules import functions
 
 from whv_ast_ms import app, db
-from flask import render_template, redirect, request, url_for, flash, abort
+from flask import render_template, redirect, request, url_for, flash, abort, send_from_directory
 from flask_login import login_user, login_required, logout_user
 from whv_ast_ms.models import User
 from whv_ast_ms.forms import RegistrationForm, LoginForm
@@ -32,8 +22,6 @@ def welcome():
     return render_template('welcome_user.html')
 
 
-
-
 ### Working Code
 # @app.route('/', methods=['GET', 'POST'])
 # def index():
@@ -48,11 +36,6 @@ def welcome():
 #             return redirect(url_for('main'))
 #
 #     return render_template('signup.html', form=form)
-#
-#
-# @app.route('/main')
-# def main():
-#     return render_template('main.html')
 
 
 @app.route('/test')
@@ -69,6 +52,11 @@ def show_configured_users():
         print(user)
 
     return render_template('management/show_configured_users.html', users=users, num_of_users=num_of_users)
+
+
+@app.route('/recordings_folder/<path:filename>')
+def get_recordings_folder(filename):
+    return send_from_directory(app.config['RECORDINGS_FOLDER'], filename, as_attachment=True)
 
 
 @app.route('/show_recordings.html', methods=['GET', 'POST'])
@@ -88,7 +76,10 @@ def show_recordings():
         print(type(date), date)
 
         if date is not "":
+            print("lala")
             record_list = functions.get_recordings(date)
+            print("record_list")
+            print("okok")
             record_list_len = len(record_list)
             for record in record_list:
                 print(record)

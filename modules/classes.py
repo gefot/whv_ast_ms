@@ -1,6 +1,8 @@
 import re
 from modules import functions
 
+# USED BELOW WITHOUT THE VARIABLE
+RECORDINGS_PATH = "/media/asterisk_recordings/"
 
 ####################################################################################
 class User:
@@ -26,7 +28,8 @@ class Recording:
         self.filename = filename
         self.fullpath = fullpath
 
-        self.relative_path = re.search(r'/home/whv/whv_ast_ms/static/(.*)', self.fullpath).group(1)
+        # THIS SHOULD BE RECORDINGS_PATH
+        self.relative_path = re.search(r'/media/asterisk_recordings/(.*)', self.fullpath).group(1)
         self.date = "unknown"
         self.time = "unknown"
         self.fullname = "unknown"
