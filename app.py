@@ -1,14 +1,13 @@
 # app.py
-
-from whv_ast_ms.forms import SignupForm, RecordingsForm
-from modules import functions
-
 from whv_ast_ms import app, db
 from flask import render_template, redirect, request, url_for, flash, abort, send_from_directory
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, logout_user, login_required
+
 from whv_ast_ms.models import User
 from whv_ast_ms.forms import RegistrationForm, LoginForm
-from werkzeug.security import generate_password_hash, check_password_hash
+from whv_ast_ms.forms import RecordingsForm
+
+from modules import functions
 
 
 @app.route('/')
@@ -22,20 +21,49 @@ def welcome():
     return render_template('welcome_user.html')
 
 
-### Working Code
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-#     form = SignupForm()
-#     if form.validate_on_submit():
-#         session['login_username'] = form.login_username.data
-#         session['login_password'] = form.login_password.data
-#
-#         if session['login_username'] != "whitehat" or session['login_password'] != "wh!teh@t":
-#             flash('Wrong username or password')
-#         else:
-#             return redirect(url_for('main'))
-#
-#     return render_template('signup.html', form=form)
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash("You are now logged out!")
+    return redirect(url_for('home'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user.check_password(form.password.data) and user is not None:
+            login_user(user)
+            flash('Logged in Successfully!')
+
+            my_next = request.args.get('next')
+
+            if my_next is None or not my_next[0] == '/':
+                my_next = url_for('welcome')
+
+            return redirect(my_next)
+
+    return render_template('login.html', form=form)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        user = User(email=form.email.data,
+                    username=form.username.data,
+                    password=form.password.data)
+
+        db.session.add(user)
+        db.session.commit()
+        flash("Thanks for Registering")
+        return redirect(url_for('login'))
+
+    return render_template('register.html', form=form)
 
 
 @app.route('/test')
