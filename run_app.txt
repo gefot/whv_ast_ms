@@ -1,0 +1,8 @@
+whv@asterisk:~/whv_ast_ms$
+
+export FLASK_APP=app.py
+flask db init
+flask db migrate -m "creating users"
+flask db upgrade
+
+

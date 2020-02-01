@@ -23,16 +23,9 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login!')
-
-
-# This class is replaced by LoginForm class
-class SignupForm(FlaskForm):
-    login_username = StringField('Enter Username')
-    login_password = PasswordField('Enter Password')
-    submit = SubmitField('Login')
 
 
 class RecordingsForm(FlaskForm):

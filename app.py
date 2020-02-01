@@ -34,7 +34,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if user.check_password(form.password.data) and user is not None:
             login_user(user)
             flash('Logged in Successfully!')
@@ -42,7 +42,7 @@ def login():
             my_next = request.args.get('next')
 
             if my_next is None or not my_next[0] == '/':
-                my_next = url_for('welcome')
+                my_next = url_for('home')
 
             return redirect(my_next)
 
