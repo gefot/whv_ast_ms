@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append('/home/whv/whv_ast_ms/')
 
 import re
@@ -7,8 +8,50 @@ import soundfile as sf
 
 from modules import classes
 
+import asterisk.manager
+
 SIP_USERS_CONF = '/etc/asterisk/sip.conf'
 RECORDINGS_SOURCE_FOLDER = "/media/asterisk_recordings/"
+
+
+####################################################################################
+def ast_ami_connect(hostname, username, password):
+
+    connector = asterisk.manager.Manager()
+    # connect to the manager
+    try:
+        connector.connect(hostname)
+        connector.login(username, password)
+
+        # get connection status (returns Success is everything is ok)
+        result = connector.status()
+        # print(result)
+
+        return connector
+
+    except asterisk.manager.ManagerSocketException as ex:
+        print("ast_ami_connect: Error in socket: {}".format(ex))
+        raise Exception(ex)
+    except asterisk.manager.ManagerAuthException as ex:
+        print("ast_ami_connect: Error in auth: {}".format(ex))
+        raise Exception(ex)
+    except asterisk.manager.ManagerException as ex:
+        print("ast_ami_connect: Error {}".format(ex))
+        raise Exception(ex)
+
+
+####################################################################################
+def ast_ami_run_command(ami_connector, command):
+
+    try:
+        result = ami_connector.command(command)
+
+        # Returns a list of lines with output of command
+        return result.response
+
+    except Exception as ex:
+        print("ast_ami_run_command exception: ", ex)
+        raise Exception(ex)
 
 
 ####################################################################################
@@ -81,4 +124,4 @@ def get_wav_duration(wav_file):
 
     return duration
 
-####################################################################################
+

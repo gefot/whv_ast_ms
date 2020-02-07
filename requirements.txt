@@ -1,14 +1,19 @@
 pip3 list -l (show packages installed locally)
 
+# Flask Support
 apt-get install python3-flask
 pip3 install WTForms
 pip3 install WTForms
 
-apt-get install python3-flask-bcrypt
 apt-get install python3-flask-sqlalchemy
 apt-get install python3-flask-login
+apt-get install python3-flask-bcrypt
+
+# Asterisk AMI/AGI
+pip3 install pyst2
 
 
+--------------------------------------------------
 alembic==0.9.9
 blinker==1.4
 chardet==3.0.4
@@ -43,3 +48,5 @@ URLObject==2.4.3
 Werkzeug==0.14.1
 wincertstore==0.2
 WTForms==2.1
+
+--------------------------------------------------

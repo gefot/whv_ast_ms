@@ -4,19 +4,21 @@ from modules import functions
 # USED BELOW WITHOUT THE VARIABLE
 RECORDINGS_PATH = "/media/asterisk_recordings/"
 
+
 ####################################################################################
 class User:
     def __init__(self, username, fullname, callerid):
         self.username = username
         self.fullname = fullname
         self.callerid = callerid
-
         try:
             self.firstname = re.search(r'^(\w+) ', fullname).group(1)
+        except:
+            self.firstname = ""
+        try:
             self.lastname = re.search(r'^\w+ (\w+)', fullname).group(1)
         except:
-            self.firstname = "unknown"
-            self.lastname = "unknown"
+            self.lastname = ""
 
     def __str__(self):
         return "{} - {} {} - {}".format(self.username, self.firstname, self.lastname, self.callerid)
