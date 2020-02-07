@@ -12,6 +12,10 @@ apt-get install python3-flask-bcrypt
 # Asterisk AMI/AGI
 pip3 install pyst2
 
+--------------------------------------------------
+Resolve pycharm_helpers issue:
+rm -rf ../.pycharm_helpers/check_all_test_suite.py
+tar -zxvf ../.pycharm_helpers/helpers.tar.gz
 
 --------------------------------------------------
 alembic==0.9.9
