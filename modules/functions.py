@@ -16,7 +16,6 @@ RECORDINGS_SOURCE_FOLDER = "/media/asterisk_recordings/"
 
 ####################################################################################
 def ast_ami_connect(hostname, username, password):
-
     connector = asterisk.manager.Manager()
     # connect to the manager
     try:
@@ -42,7 +41,6 @@ def ast_ami_connect(hostname, username, password):
 
 ####################################################################################
 def ast_ami_run_command(ami_connector, command):
-
     try:
         result = ami_connector.command(command)
 
@@ -51,6 +49,111 @@ def ast_ami_run_command(ami_connector, command):
 
     except Exception as ex:
         print("ast_ami_run_command exception: ", ex)
+        raise Exception(ex)
+
+
+####################################################################################
+def ast_ami_sip_show_peers(connector):
+    try:
+        ast_users = []
+        command = "sip show peers"
+        sip_peers = connector.command(command).response
+
+        for sip_peer in sip_peers:
+            try:
+                sip_peer.strip('\n')
+                sip_peer.strip('\r')
+                my_peer = sip_peer.split()
+
+                if 6 <= len(my_peer) <= 9 and my_peer[0] != "Name/username":
+                    tmp_username = my_peer[0]
+                    if re.search(r'/', tmp_username):
+                        username = re.search(r'(\S+)\/', tmp_username).group(1)
+                    else:
+                        username = tmp_username
+
+                    my_ast_user = classes.AstUser(username)
+                    ast_users.append(my_ast_user)
+
+            except Exception as ex:
+                print("ast_ami_sip_peers - Error parsing user: ".format(ex))
+                continue
+
+        return ast_users
+
+    except Exception as ex:
+        print("ast_ami_sip_peers: {}".format(ex))
+        raise Exception(ex)
+
+
+####################################################################################
+def ast_ami_sip_show_peer(connector, username):
+    try:
+        sip_peer_info = {}
+
+        command = "sip show peer {}".format(username)
+        # result = connector.command(command)
+        my_sip_peer = connector.command(command).response
+
+        for attr in my_sip_peer:
+            try:
+                attr_sublist = attr.split(':')
+                if attr_sublist[0].strip() == "Context":
+                    try:
+                        sip_peer_info['context'] = attr_sublist[1].strip()
+                    except:
+                        sip_peer_info['context'] = ""
+                elif attr_sublist[0].strip() == "Addr->IP":
+                    try:
+                        sip_peer_info['ip_address'] = attr_sublist[1].strip()
+                        sip_peer_info['port'] = attr_sublist[2].strip()
+                    except:
+                        sip_peer_info['ip_address'] = ""
+                        sip_peer_info['port'] = ""
+                elif attr_sublist[0].strip() == "Useragent":
+                    try:
+                        sip_peer_info['useragent'] = re.search(r'(\S+)', attr_sublist[1]).group(1)
+                    except:
+                        sip_peer_info['useragent'] = ""
+                elif attr_sublist[0].strip() == "Status":
+                    try:
+                        if "OK" in attr_sublist[1]:
+                            sip_peer_info['reg_status'] = "registered"
+                            latency = re.search(r'\S+\s\(([\S\s]+)\)', attr_sublist[1]).group(1)
+                            sip_peer_info['latency'] = latency
+                        elif "UNKNOWN" in attr_sublist[1]:
+                            sip_peer_info['reg_status'] = "unregistered"
+                            sip_peer_info['latency'] = ""
+                        elif "LAGGED" in attr_sublist[1]:
+                            sip_peer_info['reg_status'] = "lagged"
+                            latency = re.search(r'\S+\s\(([\S\s]+)\)', attr_sublist[1]).group(1)
+                            sip_peer_info['latency'] = latency
+                    except:
+                        sip_peer_info['reg_status'] = ""
+                        sip_peer_info['latency'] = ""
+                elif attr_sublist[0].strip() == "Callerid":
+                    tmp = re.search(r'\"(\S+) (\S+)\" <\+(\d+)>', attr_sublist[1])
+                    try:
+                        sip_peer_info['first_name'] = tmp.group(1)
+                    except:
+                        sip_peer_info['first_name'] = ""
+                    try:
+                        sip_peer_info['last_name'] = tmp.group(2)
+                    except:
+                        sip_peer_info['last_name'] = ""
+                    try:
+                        sip_peer_info['callerid'] = tmp.group(3)
+                    except:
+                        sip_peer_info['callerid'] = ""
+
+            except Exception as ex:
+                print("ast_ami_sip_show_peer - Error parsing attribute: ".format(ex))
+                continue
+
+        return sip_peer_info
+
+    except Exception as ex:
+        print("ast_ami_sip_show_peer: {}".format(ex))
         raise Exception(ex)
 
 
@@ -123,5 +226,3 @@ def get_wav_duration(wav_file):
     # print('seconds = {}'.format(duration))
 
     return duration
-
-

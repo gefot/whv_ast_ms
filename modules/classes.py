@@ -6,6 +6,28 @@ RECORDINGS_PATH = "/media/asterisk_recordings/"
 
 
 ####################################################################################
+class AstUser:
+    def __init__(self, username):
+        self.username = username
+
+        self.reg_status = ""
+        self.client = ""
+        self.latency = ""
+        self.ip_address = ""
+        self.port = ""
+
+        self.firstName = ""
+        self.lastName = ""
+        self.callerid = ""
+
+    def __str__(self):
+        return "{} - {} {} - {}".format(self.username, self.firstName, self.lastName, self.callerid)
+
+    def populate_peer_info(self):
+        pass
+
+
+####################################################################################
 class User:
     def __init__(self, username, fullname, callerid):
         self.username = username
