@@ -72,6 +72,7 @@ def test():
 
 
 @app.route('/show_configured_users.html')
+@login_required
 def show_configured_users():
     users = functions.get_configured_users()
     num_of_users = len(users)
@@ -88,6 +89,7 @@ def get_recordings_folder(filename):
 
 
 @app.route('/show_recordings.html', methods=['GET', 'POST'])
+@login_required
 def show_recordings():
     form = RecordingsForm()
 
@@ -116,6 +118,16 @@ def show_recordings():
 
     return render_template('management/show_recordings.html', form=form, date=date, record_list=record_list, record_list_len=record_list_len)
 
+@app.route('/show_active_users.html')
+@login_required
+def show_active_users():
+    users = functions.ast_get_sip_peers()
+    num_of_users = len(users)
+
+    for user in users:
+        print(user)
+
+    return render_template('monitor/show_active_users.html', users=users, num_of_users=num_of_users)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
