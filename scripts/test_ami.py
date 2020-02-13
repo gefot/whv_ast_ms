@@ -11,6 +11,7 @@ ADDRESS = str(data["ami"]["address"])
 AMI_USER = str(data["ami"]["username"])
 AMI_PASS = str(data["ami"]["password"])
 
+
 ami_connector = functions.ast_ami_connect(ADDRESS, AMI_USER, AMI_PASS)
 
 ast_users = functions.ast_ami_sip_show_peers(ami_connector)

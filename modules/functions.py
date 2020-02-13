@@ -9,6 +9,7 @@ import soundfile as sf
 from modules import classes
 
 import asterisk.manager
+import pymysql as mariadb
 
 SIP_USERS_CONF = '/etc/asterisk/sip.conf'
 RECORDINGS_SOURCE_FOLDER = "/media/asterisk_recordings/"
@@ -226,3 +227,43 @@ def get_wav_duration(wav_file):
     # print('seconds = {}'.format(duration))
 
     return duration
+
+
+####################################################################################
+def db_connect(db_creds):
+    """
+    :param db_creds: database credentials
+    :return: database connector
+    """
+
+    # gfot: this is a rebase test
+
+    try:
+        conn = mariadb.connect(db_creds['db_host'], db_creds['db_username'], db_creds['db_password'], db_creds['db_name'])
+        return conn
+
+    except Exception as ex:
+        print("db_connect exception: ", ex)
+        raise Exception(ex)
+
+
+####################################################################################
+def execute_db_query(cursor, query):
+    """
+    :param cursor: database cursor
+    :param query: database query
+    :return: result
+    """
+
+    try:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        return rows
+
+    except Exception as ex:
+        print("execute_db_query exception: ", ex)
+        raise Exception(ex)
+
+
+####################################################################################
