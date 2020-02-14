@@ -42,6 +42,7 @@
 <!--body-->
 <body>
 
+
 <!--navbar-->
 <nav class="navbar navbar-expand-md navbar-light">
     <button class="navbar-toggler ml-auto mb-2 bg-light" type="button" data-toggle="collapse" data-target="#myNavbar">
@@ -83,7 +84,7 @@
                                 <div id="submenu-mgmt" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item ml-4">
-                                            <a class="nav-link text-white sidebar-link" href="#">Active Users</a>
+                                            <a class="nav-link text-white sidebar-link" href="{{ url_for('show_active_users') }}">Active Users</a>
                                         </li>
                                     </ul>
 

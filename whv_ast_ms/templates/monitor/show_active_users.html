@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block block_body %}
+    <div class="container-fluid pt-3" style="width: 90%">
+        {% if users %}
+            {#            <span id="entries_count"><strong>Results: {{ num_of_users }}</strong></span>#}
+            {#            <button class="btn btn-link" onclick="export_table('myTable')">Export Table</button>#}
+            <div class="float-right">
+                <input type="search" align="right" id="myInput" onkeyup="search_table('myInput','myTable','entries_count')"
+                       placeholder="Search here...">
+                <p></p>
+            </div>
+
+            <table class="table table-striped tablesorter" id="myTable">
+                <thead>
+                <tr id="myTableHead">
+                    <th>Extension <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Full Name <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Caller ID <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>Phone Type <i class="fa fa-xs fa-chevron-down"></i></th>
+                    <th>IP Address <i class="fa fa-xs fa-chevron-down"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in users %}
+                    {% if entry.reg_status == "registered" and entry.extension != "" %}
+                        <tr>
+                            <td>{{ entry.extension }}</td>
+                            <td>{{ entry.first_name }} {{ entry.last_name }} </td>
+                            <td>{{ entry.callerid }}</td>
+                            <td>{{ entry.useragent }}</td>
+                            <td>{{ entry.ip_address }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock block_body %}
+
+
+{% block scripts %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.1/js/jquery.tablesorter.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+                $("#myTable").tablesorter();
+            }
+        );
+    </script>
+{% endblock scripts %}

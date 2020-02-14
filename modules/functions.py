@@ -4,6 +4,7 @@ sys.path.append('/home/whv/whv_ast_ms/')
 
 import re
 import os
+import json
 import soundfile as sf
 
 from modules import classes
@@ -11,6 +12,10 @@ from modules import classes
 import asterisk.manager
 import pymysql as mariadb
 
+data = json.load(open('/home/whv/whv_ast_ms/security/access.json'))
+ADDRESS = str(data["ami"]["address"])
+AMI_USER = str(data["ami"]["username"])
+AMI_PASS = str(data["ami"]["password"])
 SIP_USERS_CONF = '/etc/asterisk/sip.conf'
 RECORDINGS_SOURCE_FOLDER = "/media/asterisk_recordings/"
 
@@ -123,12 +128,18 @@ def ast_ami_sip_show_peer(connector, username):
                             latency = re.search(r'\S+\s\(([\S\s]+)\)', attr_sublist[1]).group(1)
                             sip_peer_info['latency'] = latency
                         elif "UNKNOWN" in attr_sublist[1]:
-                            sip_peer_info['reg_status'] = "unregistered"
+                            sip_peer_info['reg_status'] = "unknown"
                             sip_peer_info['latency'] = ""
                         elif "LAGGED" in attr_sublist[1]:
                             sip_peer_info['reg_status'] = "lagged"
                             latency = re.search(r'\S+\s\(([\S\s]+)\)', attr_sublist[1]).group(1)
                             sip_peer_info['latency'] = latency
+                        elif "UNREACHABLE" in attr_sublist[1]:
+                            sip_peer_info['reg_status'] = "unreachable"
+                            sip_peer_info['latency'] = ""
+                        else:
+                            sip_peer_info['reg_status'] = "unreachable"
+                            sip_peer_info['latency'] = ""
                     except:
                         sip_peer_info['reg_status'] = ""
                         sip_peer_info['latency'] = ""
@@ -156,6 +167,21 @@ def ast_ami_sip_show_peer(connector, username):
     except Exception as ex:
         print("ast_ami_sip_show_peer: {}".format(ex))
         raise Exception(ex)
+
+
+####################################################################################
+def ast_get_sip_peers():
+
+    ami_connector = ast_ami_connect(ADDRESS, AMI_USER, AMI_PASS)
+    ast_users = ast_ami_sip_show_peers(ami_connector)
+    for ast_user in ast_users:
+        sip_peer_info = ast_ami_sip_show_peer(ami_connector, ast_user.username)
+        print(sip_peer_info)
+
+        ast_user.populate_peer_info(sip_peer_info)
+        # print(ast_user)
+
+    return ast_users
 
 
 ####################################################################################

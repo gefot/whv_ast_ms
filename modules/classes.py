@@ -9,22 +9,35 @@ RECORDINGS_PATH = "/media/asterisk_recordings/"
 class AstUser:
     def __init__(self, username):
         self.username = username
+        try:
+            self.extension = re.match(r'(\d+)',username).group(1)
+        except:
+            self.extension = ""
 
-        self.reg_status = ""
-        self.client = ""
-        self.latency = ""
+        self.context = ""
         self.ip_address = ""
         self.port = ""
+        self.useragent = ""
+        self.reg_status = ""
+        self.latency = ""
 
-        self.firstName = ""
-        self.lastName = ""
+        self.first_name = ""
+        self.last_name = ""
         self.callerid = ""
 
     def __str__(self):
-        return "{} - {} {} - {}".format(self.username, self.firstName, self.lastName, self.callerid)
+        return "{} - {} {} - {} - {}".format(self.username, self.first_name, self.last_name, self.extension, self.callerid)
 
-    def populate_peer_info(self):
-        pass
+    def populate_peer_info(self, sip_peer_info):
+        self.context = sip_peer_info['context']
+        self.ip_address = sip_peer_info['ip_address']
+        self.port = sip_peer_info['port']
+        self.useragent = sip_peer_info['useragent']
+        self.reg_status = sip_peer_info['reg_status']
+        self.latency = sip_peer_info['latency']
+        self.first_name = sip_peer_info['first_name']
+        self.last_name = sip_peer_info['last_name']
+        self.callerid = sip_peer_info['callerid']
 
 
 ####################################################################################

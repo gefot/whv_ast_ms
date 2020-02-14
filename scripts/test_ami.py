@@ -11,14 +11,12 @@ ADDRESS = str(data["ami"]["address"])
 AMI_USER = str(data["ami"]["username"])
 AMI_PASS = str(data["ami"]["password"])
 
-
 ami_connector = functions.ast_ami_connect(ADDRESS, AMI_USER, AMI_PASS)
+# ami_connector = functions.ast_ami_connect(ADDRESS, AMI_USER, AMI_PASS)
+# ast_users = functions.ast_ami_sip_show_peers(ami_connector)
+ast_users = functions.ast_get_sip_peers()
 
-ast_users = functions.ast_ami_sip_show_peers(ami_connector)
+for ast_user in ast_users:
+    print(ast_user)
 
-# for ast_user in ast_users:
-#     print(ast_user)
-
-sip_peer_info = functions.ast_ami_sip_show_peer(ami_connector, "1024")
-print(sip_peer_info)
 
