@@ -7,10 +7,11 @@ RECORDINGS_PATH = "/media/asterisk_recordings/"
 
 ####################################################################################
 class AstUser:
+
     def __init__(self, username):
         self.username = username
         try:
-            self.extension = re.match(r'(\d+)',username).group(1)
+            self.extension = re.match(r'(\d+)', username).group(1)
         except:
             self.extension = ""
 
@@ -42,6 +43,7 @@ class AstUser:
 
 ####################################################################################
 class User:
+
     def __init__(self, username, fullname, callerid):
         self.username = username
         self.fullname = fullname
@@ -61,6 +63,7 @@ class User:
 
 ####################################################################################
 class Recording:
+
     def __init__(self, filename, fullpath):
         self.filename = filename
         self.fullpath = fullpath
@@ -122,4 +125,18 @@ class Recording:
     def __str__(self):
         return "{} - {} - {} - {} - {} - {} - {}".format(self.filename, self.fullpath, self.fullname, self.src, self.dst, self.call_type, self.relative_path)
 
+
+####################################################################################
+# class SMS:
+#
+#     def __init__(self, id, sms_from, sms_to, sms_text):
+#         self.id = id
+#         self.sms_from = sms_from
+#         self.sms_to = sms_to
+#         self.sms_text = sms_text
+#
+#     def __str__(self):
+#         return "{} - {} - {] - {}".format(self.id, self.sms_from, self.sms_to, self.sms_text)
+#
+#
 ####################################################################################

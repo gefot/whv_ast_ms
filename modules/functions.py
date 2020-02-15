@@ -4,29 +4,25 @@ sys.path.append('/home/whv/whv_ast_ms/')
 
 import re
 import os
-import json
 import soundfile as sf
 
 from modules import classes
 
 import asterisk.manager
 import pymysql as mariadb
+from scripts import import_creds
 
-data = json.load(open('/home/whv/whv_ast_ms/security/access.json'))
-ADDRESS = str(data["ami"]["address"])
-AMI_USER = str(data["ami"]["username"])
-AMI_PASS = str(data["ami"]["password"])
 SIP_USERS_CONF = '/etc/asterisk/sip.conf'
 RECORDINGS_SOURCE_FOLDER = "/media/asterisk_recordings/"
 
 
 ####################################################################################
-def ast_ami_connect(hostname, username, password):
+def ast_ami_connect(ami_creds):
     connector = asterisk.manager.Manager()
     # connect to the manager
     try:
-        connector.connect(hostname)
-        connector.login(username, password)
+        connector.connect(ami_creds['address'])
+        connector.login(ami_creds['username'], ami_creds['password'])
 
         # get connection status (returns Success is everything is ok)
         result = connector.status()
@@ -172,7 +168,7 @@ def ast_ami_sip_show_peer(connector, username):
 ####################################################################################
 def ast_get_sip_peers():
 
-    ami_connector = ast_ami_connect(ADDRESS, AMI_USER, AMI_PASS)
+    ami_connector = ast_ami_connect(import_creds.AMI_CREDS)
     ast_users = ast_ami_sip_show_peers(ami_connector)
     for ast_user in ast_users:
         sip_peer_info = ast_ami_sip_show_peer(ami_connector, ast_user.username)

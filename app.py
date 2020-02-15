@@ -8,6 +8,7 @@ from whv_ast_ms.forms import RegistrationForm, LoginForm
 from whv_ast_ms.forms import RecordingsForm
 
 from modules import functions
+from scripts import import_creds
 
 
 @app.route('/')
@@ -121,6 +122,7 @@ def show_recordings():
 @app.route('/show_active_users.html')
 @login_required
 def show_active_users():
+    ami_connector = functions.ast_ami_connect(import_creds.AMI_CREDS)
     users = functions.ast_get_sip_peers()
     num_of_users = len(users)
 

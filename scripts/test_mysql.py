@@ -3,18 +3,10 @@ import sys
 
 sys.path.append('/home/whv/whv_ast_ms/')
 
-import json
 from modules import functions
+from scripts import import_creds
 
-data = json.load(open('/home/whv/whv_ast_ms/security/access.json'))
-DB_CREDS = {'db_host': str(data["asterisk-db"]["db_host"]),
-            'db_username': str(data["asterisk-db"]["db_username"]),
-            'db_password': str(data["asterisk-db"]["db_password"]),
-            'db_name': str(data["asterisk-db"]["db_name"])
-            }
-
-
-db_conn = functions.db_connect(DB_CREDS)
+db_conn = functions.db_connect(import_creds.DB_CREDS)
 cursor = db_conn.cursor()
 
 query = "select * from cdr"
