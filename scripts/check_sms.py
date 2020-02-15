@@ -29,11 +29,7 @@ for line in tailer.tail(open(SMS_FILE), 10000):
                 sms_from = ""
             sms_to = re.search(pattern4, line).group(1)
             sms_text = re.search(pattern5, line).group(1)
-            print(sms_id)
-            print(sms_date)
-            print(sms_from)
-            print(sms_to)
-            print(sms_text)
+            # print(sms_id, sms_date, sms_from, sms_to, sms_text)
 
             # Check at DB for this SMS
             db_conn = functions.db_connect(import_creds.DB_CREDS)
@@ -41,7 +37,10 @@ for line in tailer.tail(open(SMS_FILE), 10000):
 
             query = "select * from sms where sms_id = '{}' ".format(sms_id)
             result = functions.execute_db_query(cursor, query)
-            print("result = {}\n".format(result))
+
+            # users = functions.get_configured_users()
+            # print(users)
+
             if len(result) == 0:
                 query = "INSERT INTO sms (sms_id, sms_date, sms_from, sms_to, sms_text) VALUES (%s, %s, %s, %s, %s)"
                 values = (sms_id, sms_date, sms_from, sms_to, sms_text)

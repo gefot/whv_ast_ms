@@ -153,6 +153,16 @@ def ast_ami_sip_show_peer(connector, username):
                         sip_peer_info['callerid'] = tmp.group(3)
                     except:
                         sip_peer_info['callerid'] = ""
+                elif attr_sublist[0].strip() == "Description":
+                    tmp = re.search(r'\"(\S+),(\S+)\"', attr_sublist[1])
+                    try:
+                        sip_peer_info['email'] = tmp.group(1)
+                    except:
+                        sip_peer_info['email'] = ""
+                    try:
+                        sip_peer_info['mobile'] = tmp.group(2)
+                    except:
+                        sip_peer_info['mobile'] = ""
 
             except Exception as ex:
                 print("ast_ami_sip_show_peer - Error parsing attribute: ".format(ex))
@@ -193,13 +203,14 @@ def get_configured_users():
         if myline.startswith("[1") and 'p' not in myline and '-' not in myline:
             try:
                 username = re.search(r'\[(\d+)\]', myline).group(1)
+                #callerid
                 next_line = next(fd)
                 fullname = re.search(r'\"(.*)\"', next_line).group(1)
-                callerid = re.search(r'<(.*)>', next_line).group(1)
-                my_user = classes.User(username, fullname, callerid)
+                callerid = re.search(r'<\+(.*)>', next_line).group(1)
                 # print(username)
                 # print(fullname)
                 # print(callerid)
+                my_user = classes.User(username, fullname, callerid)
                 users.append(my_user)
             except Exception as Ex:
                 print(Ex)

@@ -25,6 +25,8 @@ class AstUser:
         self.first_name = ""
         self.last_name = ""
         self.callerid = ""
+        self.email = ""
+        self.mobile = ""
 
     def __str__(self):
         return "{} - {} {} - {} - {}".format(self.username, self.first_name, self.last_name, self.extension, self.callerid)
@@ -39,6 +41,8 @@ class AstUser:
         self.first_name = sip_peer_info['first_name']
         self.last_name = sip_peer_info['last_name']
         self.callerid = sip_peer_info['callerid']
+        self.email = sip_peer_info['email']
+        self.mobile = sip_peer_info['mobile']
 
 
 ####################################################################################
