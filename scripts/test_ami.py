@@ -7,9 +7,12 @@ from modules import functions
 from scripts import import_creds
 
 ami_connector = functions.ast_ami_connect(import_creds.AMI_CREDS)
-ast_users = functions.ast_ami_sip_show_peers(ami_connector)
+ast_users = functions.ast_ami_get_users(ami_connector)
+
 for ast_user in ast_users:
-    print(ast_user)
+    # print(ast_user)
+    print(ast_user.__dict__)
+
 
 
 

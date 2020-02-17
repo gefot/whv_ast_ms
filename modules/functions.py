@@ -10,7 +10,6 @@ from modules import classes
 
 import asterisk.manager
 import pymysql as mariadb
-from scripts import import_creds
 
 SIP_USERS_CONF = '/etc/asterisk/sip.conf'
 RECORDINGS_SOURCE_FOLDER = "/media/asterisk_recordings/"
@@ -19,7 +18,7 @@ RECORDINGS_SOURCE_FOLDER = "/media/asterisk_recordings/"
 ####################################################################################
 def ast_ami_connect(ami_creds):
     connector = asterisk.manager.Manager()
-    # connect to the manager
+
     try:
         connector.connect(ami_creds['address'])
         connector.login(ami_creds['username'], ami_creds['password'])
@@ -55,41 +54,7 @@ def ast_ami_run_command(ami_connector, command):
 
 
 ####################################################################################
-def ast_ami_sip_show_peers(connector):
-    try:
-        ast_users = []
-        command = "sip show peers"
-        sip_peers = connector.command(command).response
-
-        for sip_peer in sip_peers:
-            try:
-                sip_peer.strip('\n')
-                sip_peer.strip('\r')
-                my_peer = sip_peer.split()
-
-                if 6 <= len(my_peer) <= 9 and my_peer[0] != "Name/username":
-                    tmp_username = my_peer[0]
-                    if re.search(r'/', tmp_username):
-                        username = re.search(r'(\S+)\/', tmp_username).group(1)
-                    else:
-                        username = tmp_username
-
-                    my_ast_user = classes.AstUser(username)
-                    ast_users.append(my_ast_user)
-
-            except Exception as ex:
-                print("ast_ami_sip_peers - Error parsing user: ".format(ex))
-                continue
-
-        return ast_users
-
-    except Exception as ex:
-        print("ast_ami_sip_peers: {}".format(ex))
-        raise Exception(ex)
-
-
-####################################################################################
-def ast_ami_sip_show_peer(connector, username):
+def ast_ami_get_sip_peer_info(connector, username):
     try:
         sip_peer_info = {}
 
@@ -176,42 +141,62 @@ def ast_ami_sip_show_peer(connector, username):
 
 
 ####################################################################################
-def ast_get_sip_peers():
+def ast_ami_get_users(connector):
+    try:
+        ast_users = []
+        command = "sip show peers"
+        sip_peers = connector.command(command).response
 
-    ami_connector = ast_ami_connect(import_creds.AMI_CREDS)
-    ast_users = ast_ami_sip_show_peers(ami_connector)
-    for ast_user in ast_users:
-        sip_peer_info = ast_ami_sip_show_peer(ami_connector, ast_user.username)
-        print(sip_peer_info)
+        for sip_peer in sip_peers:
+            try:
+                sip_peer.strip('\n')
+                sip_peer.strip('\r')
+                my_peer = sip_peer.split()
 
-        ast_user.populate_peer_info(sip_peer_info)
-        # print(ast_user)
+                if 6 <= len(my_peer) <= 10 and my_peer[0] != "Name/username":
+                    tmp_username = my_peer[0]
+                    if re.search(r'/', tmp_username):
+                        username = re.search(r'(\S+)\/', tmp_username).group(1)
+                    else:
+                        username = tmp_username
 
-    return ast_users
+                    my_ast_user = classes.AstUser(username)
+                    ast_users.append(my_ast_user)
+                    sip_peer_info = ast_ami_get_sip_peer_info(connector, my_ast_user.username)
+                    my_ast_user.populate_peer_info(sip_peer_info)
+
+            except Exception as ex:
+                print("ast_ami_sip_peers - Error parsing user: ".format(ex))
+                continue
+
+        return ast_users
+
+    except Exception as ex:
+        print("ast_ami_sip_peers: {}".format(ex))
+        raise Exception(ex)
 
 
 ####################################################################################
+# TODO: Deprecate this functions
 def get_configured_users():
-    """
-    Traverses /etc/asterisk/sip.conf
-    :return: list of User classes
-    """
     users = []
+
     fd = open(SIP_USERS_CONF, 'r')
     for line in fd:
         myline = line.strip()
         if myline.startswith("[1") and 'p' not in myline and '-' not in myline:
             try:
                 username = re.search(r'\[(\d+)\]', myline).group(1)
-                #callerid
+                # callerid
                 next_line = next(fd)
                 fullname = re.search(r'\"(.*)\"', next_line).group(1)
                 callerid = re.search(r'<\+(.*)>', next_line).group(1)
-                # print(username)
-                # print(fullname)
-                # print(callerid)
-                my_user = classes.User(username, fullname, callerid)
+
+                my_user = classes.AstUser(username)
+                my_user.callerid = callerid
+                my_user.fullname = fullname
                 users.append(my_user)
+
             except Exception as Ex:
                 print(Ex)
 
@@ -220,12 +205,6 @@ def get_configured_users():
 
 ####################################################################################
 def get_recordings(date):
-    """
-
-    :param date: date to search for recording; in format 20190530
-    :return: list of Recording classes
-    """
-
     record_list = []
 
     try:
@@ -253,13 +232,50 @@ def get_wav_duration(wav_file):
     f = sf.SoundFile(wav_file)
     samples = len(f)
     sampling_rate = f.samplerate
-    duration = (int)(samples / sampling_rate)
+    duration = int(samples / sampling_rate)
 
     # print('samples = {}'.format(samples))
     # print('sample rate = {}'.format(sampling_rate))
     # print('seconds = {}'.format(duration))
 
     return duration
+
+
+####################################################################################
+def get_ip_info(ip_address):
+
+    try:
+        ip_info = {}
+
+        command = "curl ipinfo.io/{}".format(ip_address)
+        result = os.popen(command).read()
+        # result = commands.getoutput(command)
+        try:
+            city = re.search("\"city\":\s\"(\w+)\"", result).group(1)
+        except:
+            city = ""
+        try:
+            region = re.search("\"region\":\s\"([\w\d\s]+)\"", result).group(1)
+        except:
+            region = ""
+        try:
+            country = re.search("\"country\":\s\"(\w+)\"", result).group(1)
+        except:
+            country = ""
+        try:
+            provider = re.search("\"org\":\s\"([\w\d\s\(\)-]+)\"", result).group(1)
+        except:
+            provider = ""
+
+        ip_info['city'] = city
+        ip_info['region'] = region
+        ip_info['country'] = country
+        ip_info['provider'] = provider
+
+        return ip_info
+
+    except:
+        return {}
 
 
 ####################################################################################
@@ -297,6 +313,5 @@ def execute_db_query(cursor, query):
     except Exception as ex:
         print("execute_db_query exception: ", ex)
         raise Exception(ex)
-
 
 ####################################################################################

@@ -24,12 +24,13 @@ class AstUser:
 
         self.first_name = ""
         self.last_name = ""
+        self.fullname = ""
         self.callerid = ""
         self.email = ""
         self.mobile = ""
 
     def __str__(self):
-        return "{} - {} {} - {} - {}".format(self.username, self.first_name, self.last_name, self.extension, self.callerid)
+        return "{} - {} - {} - {}".format(self.username, self.fullname, self.extension, self.callerid)
 
     def populate_peer_info(self, sip_peer_info):
         self.context = sip_peer_info['context']
@@ -40,29 +41,10 @@ class AstUser:
         self.latency = sip_peer_info['latency']
         self.first_name = sip_peer_info['first_name']
         self.last_name = sip_peer_info['last_name']
+        self.fullname = "{} {}".format(sip_peer_info['first_name'], sip_peer_info['last_name'])
         self.callerid = sip_peer_info['callerid']
         self.email = sip_peer_info['email']
         self.mobile = sip_peer_info['mobile']
-
-
-####################################################################################
-class User:
-
-    def __init__(self, username, fullname, callerid):
-        self.username = username
-        self.fullname = fullname
-        self.callerid = callerid
-        try:
-            self.firstname = re.search(r'^(\w+) ', fullname).group(1)
-        except:
-            self.firstname = ""
-        try:
-            self.lastname = re.search(r'^\w+ (\w+)', fullname).group(1)
-        except:
-            self.lastname = ""
-
-    def __str__(self):
-        return "{} - {} {} - {}".format(self.username, self.firstname, self.lastname, self.callerid)
 
 
 ####################################################################################
@@ -82,6 +64,7 @@ class Recording:
         self.call_type = "unknown"
         self.wav_duration = "unknown"
 
+        # TODO: Function get_configured_users() is deprecated and needs be replaced
         asterisk_users = functions.get_configured_users()
 
         try:
@@ -112,12 +95,12 @@ class Recording:
             self.dst = "unknown"
 
         for user in asterisk_users:
-            if user.callerid == self.src:
+            if user.callerid in self.src:
                 self.call_type = "outgoing"
                 self.fullname = user.fullname
                 # Replace source (10-digit number) with user fullname
                 self.src = user.fullname
-            elif user.username == self.dst:
+            elif user.username in self.dst:
                 self.call_type = "incoming"
                 self.fullname = user.fullname
                 # Replace destination (4-digit  number) with user fullname

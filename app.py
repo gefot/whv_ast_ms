@@ -75,13 +75,20 @@ def test():
 @app.route('/show_configured_users.html')
 @login_required
 def show_configured_users():
-    users = functions.get_configured_users()
-    num_of_users = len(users)
+    ami_connector = functions.ast_ami_connect(import_creds.AMI_CREDS)
+    users = functions.ast_ami_get_users(ami_connector)
 
+    new_users = []
     for user in users:
+        if 'p' not in user.username:
+            new_users.append(user)
+
+    num_of_new_users = len(new_users)
+
+    for user in new_users:
         print(user)
 
-    return render_template('management/show_configured_users.html', users=users, num_of_users=num_of_users)
+    return render_template('management/show_configured_users.html', users=new_users, num_of_users=num_of_new_users)
 
 
 @app.route('/recordings_folder/<path:filename>')
@@ -119,17 +126,19 @@ def show_recordings():
 
     return render_template('management/show_recordings.html', form=form, date=date, record_list=record_list, record_list_len=record_list_len)
 
+
 @app.route('/show_active_users.html')
 @login_required
 def show_active_users():
     ami_connector = functions.ast_ami_connect(import_creds.AMI_CREDS)
-    users = functions.ast_get_sip_peers()
+    users = functions.ast_ami_get_users(ami_connector)
     num_of_users = len(users)
 
     for user in users:
         print(user)
 
     return render_template('monitor/show_active_users.html', users=users, num_of_users=num_of_users)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
