@@ -13,7 +13,9 @@ import shutil
 
 from modules import functions
 
+# Source is asterisk:asterisk
 RECORDINGS_SOURCE_FOLDER = "/var/spool/asterisk/monitor/"
+# Destination is whv:whv
 RECORDINGS_DEST_FOLDER = "/media/asterisk_recordings/"
 
 file_list = []

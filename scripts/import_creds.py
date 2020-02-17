@@ -19,5 +19,10 @@ AMI_CREDS = {
     'address': str(data["ami"]["address"]),
     'username': str(data["ami"]["username"]),
     'password': str(data["ami"]["password"])
+}
 
+EMAIL_CREDS = {
+    'username': str(data["o365"]["username"]),
+    'password': str(data["o365"]["password"]),
+    'mail_server': str(data["o365"]["mail_server"])
 }

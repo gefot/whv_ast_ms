@@ -11,6 +11,12 @@ cursor = db_conn.cursor()
 
 query = "select * from cdr"
 result = functions.execute_db_query(cursor, query)
-print(result)
+for res in result:
+    print(res)
+
+query = "select * from sms ORDER BY sms_date"
+result = functions.execute_db_query(cursor, query)
+for res in result:
+    print(res)
 
 db_conn.close()
