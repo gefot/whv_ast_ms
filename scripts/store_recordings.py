@@ -1,7 +1,7 @@
 """
-Gets recordings from /var/spool/asterisk/monitor/
-and stores them in Django project (/static/recordings/) according to date (eg.201905)
+This is a whv crontab; for every day at 20:30pm
 """
+
 # This is needed so as to be run on CLI
 import sys
 

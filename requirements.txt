@@ -1,10 +1,10 @@
+----------------------------------------------------------------------------------------------------
 pip3 list -l (show packages installed locally)
 
 # Flask Support
 apt-get install python3-flask
 pip3 install WTForms
 pip3 install WTForms
-pip3 install tailer
 
 apt-get install python3-flask-sqlalchemy
 apt-get install python3-flask-login
@@ -13,12 +13,21 @@ apt-get install python3-flask-bcrypt
 # Asterisk AMI/AGI
 pip3 install pyst2
 
---------------------------------------------------
+# oauth2
+pip3 install oauth2
+pip3 install Flask-Dance
+pip3 install Flask-OAuth
+
+
+# Other libraries
+pip3 install tailer
+
+----------------------------------------------------------------------------------------------------
 Resolve pycharm_helpers issue:
 rm -rf ../.pycharm_helpers/check_all_test_suite.py
 tar -zxvf ../.pycharm_helpers/helpers.tar.gz
 
---------------------------------------------------
+----------------------------------------------------------------------------------------------------
 tailer==0.4.1
 
 alembic==0.9.9
@@ -55,4 +64,4 @@ URLObject==2.4.3
 Werkzeug==0.14.1
 wincertstore==0.2
 WTForms==2.1
---------------------------------------------------
+----------------------------------------------------------------------------------------------------
