@@ -64,7 +64,7 @@ class Recording:
         self.call_type = "unknown"
         self.wav_duration = "unknown"
 
-        # TODO: Function get_configured_users() is deprecated and needs be replaced
+        # TODO: Function get_configured_users() is deprecated and needs be replaced. Though it is used for every recording created and AMI should be avoided
         asterisk_users = functions.get_configured_users()
 
         try:

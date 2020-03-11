@@ -183,7 +183,7 @@ def ast_ami_get_users(connector):
 
 
 ####################################################################################
-# TODO: Deprecate this functions
+# TODO: Function get_configured_users() is deprecated and needs be replaced. Though it is used for every recording created and AMI should be avoided
 def get_configured_users():
     users = []
 
